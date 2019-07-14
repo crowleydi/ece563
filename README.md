@@ -13,4 +13,4 @@ that creates a silo file. Finally, the silo file can be viewed
 with the visit program. An animation of the results is available
 here:
 
-	https://www.youtube.com/watch?v=WIDFqDFXxaQ
+	[https://www.youtube.com/watch?v=WIDFqDFXxaQ]
