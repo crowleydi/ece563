@@ -1,21 +1,38 @@
-#CPPFLAGS = -I/usr/local/include/eigen3
-HOME=/home/crowleyd
-CPPFLAGS = -DARMA_DONT_USE_WRAPPER 
-CXXFLAGS = -g -O3 -Wall -std=c++11 -fopenmp
-LDFLAGS = -fopenmp
-LDLIBS = -lstdc++ -lopenblas -lm
+
 CXX=g++
-LD=gcc
+CC=g++ # for linking
+
+COMP_FLAGS=-O3 -Wall -std=c++14
+ARMA_FLAGS=-DARMA_DONT_USE_WRAPPER $(shell pkg-config --cflags armadillo)
+ARMA_FLAGS=$(shell pkg-config --cflags armadillo)
+BLAS_LIB=$(shell pkg-config --libs armadillo)
+
+ifeq ($(shell uname), Darwin)
+OMP_FLAGS=-Xpreprocessor -fopenmp
+OMP_LIB=-L/opt/homebrew/opt/libomp/lib -lomp
+OMP_INCLUDE=-I/opt/homebrew/opt/libomp/include
+else
+OMP_FLAGS=-fopenmp
+OMP_LIB=-fopenmp
+endif
 
 all: build solve simpsolve
 
+build: CXXFLAGS = $(COMP_FLAGS) $(OMP_FLAGS)
+build: CPPFLAGS = $(ARMA_FLAGS) $(OMP_INCLUDE)
+build: LDFLAGS = $(OMP_LIB) $(BLAS_LIB)
 build: build.o RWGDomain.o fio.o
-solve: solve.o RWGDomain.o fio.o
-simpsolve: simpsolve.o fio.o
-proj2: LDLIBS = -lstdc++ -lopenblas -lm -lpthread 
-proj2: proj2.o RWGDomain.o integrate.o
 
-spherical.o: spherical.cc spherical.h point.h
+solve: CXXFLAGS = $(COMP_FLAGS)
+solve: CPPFLAGS = $(ARMA_FLAGS)
+solve: LDLIBS = $(BLAS_LIB)
+solve: solve.o RWGDomain.o fio.o
+
+simpsolve: CXXFLAGS = $(COMP_FLAGS)
+simpsolve: CPPFLAGS = $(ARMA_FLAGS)
+simpsolve: LDLIBS = $(BLAS_LIB)
+simpsolve: simpsolve.o fio.o
+
 integrate.o: point.h integrate.h
 RWGDomain.o: RWGDomain.cc point.h RWGDomain.h
 
@@ -30,5 +47,5 @@ data5_current.silo: data5.tri data5.curJ
 	-emsurftranslator -s data5
 
 clean:
-	rm -f *.o proj *.gnu
+	rm -f *.o proj *.gnu build solve simpsolve
 

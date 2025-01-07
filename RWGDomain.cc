@@ -4,7 +4,6 @@
 
 #include "RWGDomain.h"
 
-//#include "spherical.h"
 //const double deg = M_PI/180.0;
 
 void

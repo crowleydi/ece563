@@ -96,9 +96,9 @@ build(Matrix& Z, ColVec& fb, RWGDomain& d, double k,
 #endif //_OPENMP
 		{
 			int pct = 100 - (100*(size-i)*(size-i))/size/size;
-			if (pct % 10 == 0 && pct > npct) {
+			if (pct != npct) {
 				std::cout << "..." << pct << "%" << std::flush;
-				while (npct < pct) npct += 10;
+				npct = pct;
 			}
 		}
 		const RWGEdge& ei = d.edges()[i];
@@ -196,9 +196,9 @@ main(int argc, const char **argv)
 			<< std::endl;
 
 		char fname[50];
-		sprintf(fname,"data%d_%d.tri", f, i);
+		snprintf(fname,sizeof(fname),"data%d_%d.tri", f, i);
 		writeTRI(fname, d);
-		sprintf(fname,"data%d_%d.mat", f, i);
+		snprintf(fname,sizeof(fname),"data%d_%d.mat", f, i);
 
 		std::ofstream os(fname);
 		writeMAT(os, Z.memptr(), size, size);
