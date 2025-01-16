@@ -1,36 +1,36 @@
-
+# for linux:
+# apt install armadillo
+# for macos:
+# brew install armadillo
 CXX=g++
-CC=g++ # for linking
+CC=g++ # use the C++ compiler for linking
+
+# the default Apple clang doesn't support OpenMP
+ifeq ($(shell uname), Darwin)
+CXX=g++-14
+CC=g++-14
+endif
 
 COMP_FLAGS=-O3 -Wall -std=c++14
-ARMA_FLAGS=-DARMA_DONT_USE_WRAPPER $(shell pkg-config --cflags armadillo)
 ARMA_FLAGS=$(shell pkg-config --cflags armadillo)
-BLAS_LIB=$(shell pkg-config --libs armadillo)
-
-ifeq ($(shell uname), Darwin)
-OMP_FLAGS=-Xpreprocessor -fopenmp
-OMP_LIB=-L/opt/homebrew/opt/libomp/lib -lomp
-OMP_INCLUDE=-I/opt/homebrew/opt/libomp/include
-else
+ARMA_LIB=$(shell pkg-config --libs armadillo)
 OMP_FLAGS=-fopenmp
-OMP_LIB=-fopenmp
-endif
 
 all: build solve simpsolve
 
 build: CXXFLAGS = $(COMP_FLAGS) $(OMP_FLAGS)
-build: CPPFLAGS = $(ARMA_FLAGS) $(OMP_INCLUDE)
-build: LDFLAGS = $(OMP_LIB) $(BLAS_LIB)
+build: CPPFLAGS = $(ARMA_FLAGS)
+build: LDFLAGS = $(OMP_FLAGS) $(ARMA_LIB)
 build: build.o RWGDomain.o fio.o
 
 solve: CXXFLAGS = $(COMP_FLAGS)
 solve: CPPFLAGS = $(ARMA_FLAGS)
-solve: LDLIBS = $(BLAS_LIB)
+solve: LDLIBS = $(ARMA_LIB)
 solve: solve.o RWGDomain.o fio.o
 
 simpsolve: CXXFLAGS = $(COMP_FLAGS)
 simpsolve: CPPFLAGS = $(ARMA_FLAGS)
-simpsolve: LDLIBS = $(BLAS_LIB)
+simpsolve: LDLIBS = $(ARMA_LIB)
 simpsolve: simpsolve.o fio.o
 
 integrate.o: point.h integrate.h
