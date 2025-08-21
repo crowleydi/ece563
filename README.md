@@ -4,6 +4,7 @@
 This repository contains code for calculating the induced surface currents
 on a Perfect Electric Conductor (PEC) sphere subjected to an incident plane
 wave electromagnetic field, as part of the ECE 563 final project in Fall 2017.
+<img width="990" height="926" alt="Screenshot from 2025-08-20 22-09-18" src="https://github.com/user-attachments/assets/7204615b-0005-4504-ba46-e21c4d97b789" />
 
 ## Overview
 The code implements the Method of Moments (MoM) for solving the Electric Field
@@ -20,7 +21,6 @@ wavelength) illuminated by an incident plane wave:
 \mathbf{E}_{inc} = \hat{x} e^{-jkz}
 ```
 where $k = 2\pi / \lambda$ is the wave number, and $j = \sqrt{-1}$.
-
 The induced surface current $\mathbf{J}$ on the PEC surface satisfies the EFIE:
 ```math
 \mathbf{E}_{inc} \cdot \hat{t} = - \frac{1}{j\omega \epsilon_0} \hat{t} \cdot \left( j\omega \mu_0 \int_S \mathbf{J}(\mathbf{r}') \ G(\mathbf{r}, \mathbf{r}') dS' - \frac{1}{j\omega \mu_0} \nabla \int_S \nabla' \cdot \mathbf{J}(\mathbf{r}') \ G(\mathbf{r}, \mathbf{r}') dS' \right)
