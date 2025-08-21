@@ -7,11 +7,11 @@ CC=g++ # use the C++ compiler for linking
 
 # the default Apple clang doesn't support OpenMP
 ifeq ($(shell uname), Darwin)
-CXX=g++-14
-CC=g++-14
+CXX=g++-17
+CC=g++-17
 endif
 
-COMP_FLAGS=-O3 -Wall -std=c++14
+COMP_FLAGS=-O3 -Wall -std=c++17
 ARMA_FLAGS=$(shell pkg-config --cflags armadillo)
 ARMA_LIB=$(shell pkg-config --libs armadillo)
 OMP_FLAGS=-fopenmp

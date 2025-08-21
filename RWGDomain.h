@@ -135,5 +135,6 @@ inline cplx green(double k, const vect& r, const vect& rp)
 
 void writeTRI(std::string fname, const RWGDomain& d, size_t level = 0);
 void writeCURJ(std::string fname, const RWGDomain& d, size_t level = 0);
+void writeVTK(std::string fname, const RWGDomain& d);
 
 #endif // __563_rwgdomain_h_

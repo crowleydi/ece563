@@ -68,7 +68,8 @@ main(int argc, const char **argv)
 			});
 		//readMAT(prefix + ".mat", size, Z.data(), b.data());
 		solve(d, Z, b);
-		writeCURJ(prefix + ".curJ", d);
+		//writeCURJ(prefix + ".curJ", d);
+		writeVTK(prefix + ".vtk", d);
 	}
 
 	return 0;
