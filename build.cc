@@ -10,11 +10,7 @@
 
 #include "RWGDomain.h"
 #include "fio.h"
-#include "minimat.h"
 #include "integrate.h"
-
-using Matrix = minimat;
-using ColVec = minivect;
 
 // high resolution clock to measure time to solve
 using Clock = std::chrono::high_resolution_clock;

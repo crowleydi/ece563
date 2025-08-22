@@ -3,19 +3,6 @@
 #include "RWGDomain.h"
 #include "fio.h"
 
-#define NDEBUG 1
-// Eigen or Armadillo libs
-#if 1
-#include <armadillo>
-using Matrix = arma::Mat<cplx>;
-using ColVec = arma::Col<cplx>;
-#else
-#define EIGEN_NO_DEBUG
-#include <Eigen/Dense>
-using Matrix = Eigen::Matrix<cplx, Eigen::Dynamic, Eigen::Dynamic>;
-using ColVec = Eigen::Matrix<cplx, Eigen::Dynamic, 1>;
-#endif
-
 // high resolution clock for timing the solver
 using Clock = std::chrono::high_resolution_clock;
 
@@ -40,6 +27,7 @@ solve(RWGDomain& d, Matrix& A, ColVec& b)
     for(auto& e: d.edges())
         e.u = x(e.idx);
 }
+
 
 int
 main(int argc, const char **argv)

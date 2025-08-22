@@ -129,6 +129,10 @@ inline cplx green(Scalar k, const vect& r, const vect& rp)
     return std::exp(jkR) / ((Scalar)(4.0 * M_PI * R));
 }
 
+#include <armadillo>
+using Matrix = arma::Mat<cplx>;
+using ColVec = arma::Col<cplx>;
+
 // Output functions for visualization and data storage
 void writeTRI(std::string fname, const RWGDomain& d, size_t level = 0);
 void writeCURJ(std::string fname, const RWGDomain& d, size_t level = 0);
