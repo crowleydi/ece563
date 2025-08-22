@@ -76,7 +76,7 @@ private:
 class RWGSphere : public RWGDomain
 {
 public:
-    RWGSphere(double r)
+    RWGSphere(Scalar r)
     {
         init(r); // Initialize with an icosahedron mesh
     }
@@ -86,15 +86,15 @@ public:
 
 private:
     // Initializes the sphere with an icosahedron mesh of radius r
-    void init(double r);
-    double _r; // Sphere radius
+    void init(Scalar r);
+    Scalar _r; // Sphere radius
 };
 
 // Computes RWG basis function coefficients (l_n / (2 A)) for edge n
-inline double dellambda0(const Triangle& t) { return t.len0 / t.area; }
-inline double dellambda1(const Triangle& t) { return t.len1 / t.area; }
-inline double dellambda2(const Triangle& t) { return t.len2 / t.area; }
-inline double dellambda(const Triangle& t, int n)
+inline Scalar dellambda0(const Triangle& t) { return t.len0 / t.area; }
+inline Scalar dellambda1(const Triangle& t) { return t.len1 / t.area; }
+inline Scalar dellambda2(const Triangle& t) { return t.len2 / t.area; }
+inline Scalar dellambda(const Triangle& t, int n)
 {
     if (n == 0) return dellambda0(t);
     if (n == 1) return dellambda1(t);
@@ -104,15 +104,15 @@ inline double dellambda(const Triangle& t, int n)
 // Computes RWG basis function vectors at point r in triangle t for edge n
 inline vect lambda0(const Triangle& t, const Point& r)
 {
-    return (dellambda0(t) / 2.0) * (r - t.p0);
+    return (dellambda0(t) / (Scalar)2.0) * (r - t.p0);
 }
 inline vect lambda1(const Triangle& t, const Point& r)
 {
-    return (dellambda1(t) / 2.0) * (r - t.p1);
+    return (dellambda1(t) / (Scalar)2.0) * (r - t.p1);
 }
 inline vect lambda2(const Triangle& t, const Point& r)
 {
-    return (dellambda2(t) / 2.0) * (r - t.p2);
+    return (dellambda2(t) / (Scalar)2.0) * (r - t.p2);
 }
 inline vect lambda(const Triangle& t, int n, const Point& r)
 {
@@ -122,11 +122,11 @@ inline vect lambda(const Triangle& t, int n, const Point& r)
 }
 
 // Computes the 3D scalar Green's function for wave number k
-inline cplx green(double k, const vect& r, const vect& rp)
+inline cplx green(Scalar k, const vect& r, const vect& rp)
 {
-    double R = norm(rp - r);
+    Scalar R = norm(rp - r);
     cplx jkR(0.0, -k * R);
-    return std::exp(jkR) / (4.0 * M_PI * R);
+    return std::exp(jkR) / ((Scalar)(4.0 * M_PI * R));
 }
 
 // Output functions for visualization and data storage

@@ -1,9 +1,5 @@
 #include "integrate.h"
 
-struct gaussQuadxyw {
-    double x, y, w;
-};
-
 // 12-point quadrature rule for high accuracy
 static const gaussQuadxyw pointWeights12 []= {
     {0.873821971016996,0.063089014491502,0.050844906370207},

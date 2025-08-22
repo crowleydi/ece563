@@ -39,11 +39,11 @@ RWGSphere::refine(size_t refine)
 // Uses 12 vertices and 20 triangles, ensuring a manifold mesh (30 edges,
 // each shared by two triangles)
 void
-RWGSphere::init(double r)
+RWGSphere::init(Scalar r)
 {
     _r = r;
-    const double phi = (1.0 + std::sqrt(5.0)) / 2.0; // Golden ratio
-    const double scale = r / std::sqrt(phi * phi + 1.0); // Normalize to radius r
+    const Scalar phi = (1.0 + std::sqrt(5.0)) / 2.0; // Golden ratio
+    const Scalar scale = r / std::sqrt(phi * phi + 1.0); // Normalize to radius r
 
     // Define 12 vertices of the icosahedron, positioned on the sphere
     std::vector<Point> vertices = {
@@ -95,7 +95,7 @@ RWGDomain::discretize(std::istream& in)
 {
 
     // this really needs some error checking ...
-    double scale;
+    Scalar scale;
     in >> scale;
 
     size_t numPoints;
@@ -218,7 +218,7 @@ writeTRI(std::string fname, const RWGDomain& d, size_t level)
 
 
 // Helper function to compute norm of cvect
-double cvect_norm(const cvect& v) {
+Scalar cvect_norm(const cvect& v) {
     return std::sqrt(std::norm(v.x) + std::norm(v.y) + std::norm(v.z));
 }
 
@@ -238,7 +238,7 @@ cvect compute_J_at_vertex(size_t tri_idx, int vertex_idx, const Point& r, const 
         }
         const RWGEdge& edge = edges[it->second];
         bool is_plus = (edge.Tp() == tri_idx);
-        double sign = is_plus ? 1.0 : -1.0;
+        Scalar sign = is_plus ? 1.0 : -1.0;
         int local_l = is_plus ? edge.lp() : edge.lm();
 
         vect lamb = lambda(t, local_l, r);
@@ -288,7 +288,7 @@ writeVTK(std::string fname, const RWGDomain& d) {
             J_sum += J;
         }
         // Average over the number of incident triangles
-        vertex_currents[vid] = J_sum / static_cast<double>(tri_list.size());
+        vertex_currents[vid] = J_sum / static_cast<Scalar>(tri_list.size());
     }
 
     // Open file

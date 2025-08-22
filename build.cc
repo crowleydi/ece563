@@ -11,18 +11,16 @@
 #include "RWGDomain.h"
 #include "fio.h"
 #include "minimat.h"
+#include "integrate.h"
+
 using Matrix = minimat;
 using ColVec = minivect;
 
 // high resolution clock to measure time to solve
 using Clock = std::chrono::high_resolution_clock;
-const double c0 = 299792458;    // Speed of light (m/s)
-const double mu0 = M_PI*4.0e-7; // Permeability of free space
-const double Z0 = mu0*c0;       // Impedance of free space
-
-struct gaussQuadxyw {
-    double x, y, w;
-};
+const Scalar c0 = 299792458;    // Speed of light (m/s)
+const Scalar mu0 = M_PI*4.0e-7; // Permeability of free space
+const Scalar Z0 = mu0*c0;       // Impedance of free space
 
 // Gaussian quadrature points and weights for 9-point rule
 // Used for surface integrals in MoM matrix assembly
@@ -50,7 +48,7 @@ static const gaussQuadxyw GQ7 []= {
     {0.05971587178977, 0.47014206410512, 0.06619707639425} };
 
 void
-abintegral(cplx& a, cplx& b, double k, const Triangle& t1, int l1, const Triangle& t2, int l2)
+abintegral(cplx& a, cplx& b, Scalar k, const Triangle& t1, int l1, const Triangle& t2, int l2)
 {
     cplx atot, btot;
     Point rp[7];
@@ -79,10 +77,10 @@ abintegral(cplx& a, cplx& b, double k, const Triangle& t1, int l1, const Triangl
 
 // Builds the impedance matrix Z and forcing vector fb using MoM
 void
-build(Matrix& Z, ColVec& fb, RWGDomain& d, double k,
+build(Matrix& Z, ColVec& fb, RWGDomain& d, Scalar k,
     std::function<cvect(const vect&)> einc)
 {
-    double k2 = k*k;
+    Scalar k2 = k*k;
     int npct = 0;
     size_t size = d.edges().size();
     cplx jknu = cplx(0.0,k*Z0);
@@ -162,11 +160,11 @@ main(int argc, const char **argv)
     if (argc > 1)
         f = atoi(argv[1]);
 
-    double lambda = c0 / (f * 1.0e6);  // Wavelength
-    double r = 0.25 * lambda;          // Sphere radius
+    Scalar lambda = c0 / (f * 1.0e6);  // Wavelength
+    Scalar r = 0.25 * lambda;          // Sphere radius
     vect k(0.0, 0.0, 2.0*M_PI/lambda); // Wave vector
 
-    for (int i: {1,2,3,4})
+    for (int i: {2,3,4})
     {
         RWGSphere d(r);
         d.refine(i);

@@ -9,8 +9,8 @@ class Triangle
     public:
         Point p0, p1, p2; // Vertices of the triangle
 
-        double area;             // Triangle area (0.5 * |normal|)
-        double len0, len1, len2; // Edge lengths: p1-p2, p0-p2, p0-p1
+        Scalar area;             // Triangle area (0.5 * |normal|)
+        Scalar len0, len1, len2; // Edge lengths: p1-p2, p0-p2, p0-p1
         size_t idx;              // Index for matrix assembly
 
         Triangle() :area(0.0), len0(0.0), len1(0.0), len2(0.0), idx(-1) {}
@@ -38,9 +38,9 @@ class Triangle
 
         // Computes a point in the triangle using barycentric coordinates (l0, l1, l2)
         // l2 = 1 - l0 - l1
-        Point getBaryPoint(double l0, double l1) const
+        Point getBaryPoint(Scalar l0, Scalar l1) const
         {
-            double l2 = 1.0-l0-l1;
+            Scalar l2 = 1.0-l0-l1;
             return p0*l0 + p1*l1 + p2*l2;
         }
 

@@ -4,6 +4,10 @@
 #include <functional>
 #include "triangle.h"
 
+struct gaussQuadxyw {
+    Scalar x, y, w;
+};
+
 // Gaussian quadrature for surface integrals over triangles
 // Used for computing MoM matrix elements and forcing vector
 cplx surfaceIntegralGQ7(const Triangle&, std::function<cplx(const Point&)>);

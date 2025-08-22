@@ -17,7 +17,7 @@ struct PointVector
 };
 
 // typedef for complex numbers
-using Scalar = double;
+using Scalar = float;
 using cplx = std::complex<Scalar>;
 
 // common types we will use
@@ -45,12 +45,13 @@ bool operator!=(const PointVector<T>& a, const PointVector<T>& b)
     return a.x != b.x || a.y != b.y || a.z != b.z;
 }
 
+// operator< is used by std::map
 template<typename T> inline
 bool operator<(const PointVector<T>& a, const PointVector<T>& b)
 {
     return (a.x < b.x ||
-            (a.x == b.x && a.y < b.y) ||
-            (a.x == b.x && a.y == b.y && a.z < b.z));
+           (a.x == b.x && a.y < b.y) ||
+           (a.x == b.x && a.y == b.y && a.z < b.z));
 }
 
 // Vector operations for geometry and RWG calculations

@@ -18,10 +18,13 @@ OMP_FLAGS=-fopenmp
 
 all: build solve
 
-build: CXXFLAGS = $(COMP_FLAGS) $(OMP_FLAGS)
+build: CXXFLAGS = $(COMP_FLAGS)
 build: CPPFLAGS = $(ARMA_FLAGS)
 build: LDFLAGS = $(OMP_FLAGS) $(ARMA_LIB)
 build: build.o RWGDomain.o fio.o
+
+build.o: CXXFLAGS = $(COMP_FLAGS) $(OMP_FLAGS)
+build.o: build.cc
 
 solve: CXXFLAGS = $(COMP_FLAGS)
 solve: CPPFLAGS = $(ARMA_FLAGS)
@@ -37,5 +40,5 @@ integrate.o: point.h integrate.h
 RWGDomain.o: RWGDomain.cc point.h RWGDomain.h
 
 clean:
-	rm -f *.o proj *.gnu build solve simpsolve
+	rm -f *.o *.tri *.mat *.vtk build solve simpsolve
 

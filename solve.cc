@@ -7,8 +7,8 @@
 // Eigen or Armadillo libs
 #if 1
 #include <armadillo>
-using Matrix = arma::cx_mat;
-using ColVec = arma::cx_colvec;
+using Matrix = arma::Mat<cplx>;
+using ColVec = arma::Col<cplx>;
 #else
 #define EIGEN_NO_DEBUG
 #include <Eigen/Dense>
