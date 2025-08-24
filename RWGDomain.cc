@@ -177,10 +177,9 @@ RWGDomain::updateEdges()
 
 // write trangle information
 void
-writeTRI(std::string fname, const RWGDomain& d, size_t level)
+writeTRI(std::ostream& os, const RWGDomain& d)
 {
     std::map<Point,size_t> pmap;
-    std::ofstream os(fname);
     size_t fsize = 0;
 
     for(auto& f: d.faces())
@@ -252,7 +251,7 @@ cvect compute_J_at_vertex(size_t tri_idx, int vertex_idx, const Point& r, const 
 
 // write currents and mesh to VTK
 void
-writeVTK(std::string fname, const RWGDomain& d) {
+writeVTK(std::ostream& os, const RWGDomain& d) {
     const auto& faces = d.faces();
     const auto& edges = d.edges();
     const auto& edgeMap = d.edgemap();
@@ -289,13 +288,6 @@ writeVTK(std::string fname, const RWGDomain& d) {
         }
         // Average over the number of incident triangles
         vertex_currents[vid] = J_sum / static_cast<Scalar>(tri_list.size());
-    }
-
-    // Open file
-    std::ofstream os(fname);
-    if (!os.is_open()) {
-        std::cerr << "Error: Cannot open file " << fname << std::endl;
-        return;
     }
 
     // VTK header
@@ -346,6 +338,4 @@ writeVTK(std::string fname, const RWGDomain& d) {
         const cvect& J = vertex_currents[i];
         os << J.x.imag() << " " << J.y.imag() << " " << J.z.imag() << std::endl;
     }
-
-    os.close();
 }

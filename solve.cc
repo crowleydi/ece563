@@ -39,6 +39,10 @@ main(int argc, const char **argv)
     //for (int i: {1,2,3,4,5})
     {
         std::ifstream in(prefix + ".tri");
+        if (!in) {
+            std::cerr << "could not open tri file." << std::endl;
+            return 1;
+        }
 
         // need to read mesh/TRI file to create the domain
         RWGDomain d;
@@ -68,7 +72,8 @@ main(int argc, const char **argv)
         solve(d, Z, b);
 
         // write the mesh, currents to VTK
-        writeVTK(prefix + ".vtk", d);
+        std::ofstream vtk(prefix + ".vtk");
+        writeVTK(vtk, d);
     }
 
     return 0;

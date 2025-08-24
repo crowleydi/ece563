@@ -134,8 +134,7 @@ using Matrix = arma::Mat<cplx>;
 using ColVec = arma::Col<cplx>;
 
 // Output functions for visualization and data storage
-void writeTRI(std::string fname, const RWGDomain& d, size_t level = 0);
-void writeCURJ(std::string fname, const RWGDomain& d, size_t level = 0);
-void writeVTK(std::string fname, const RWGDomain& d);
+void writeTRI(std::ostream&, const RWGDomain& d);
+void writeVTK(std::ostream&, const RWGDomain& d);
 
 #endif // __563_rwgdomain_h_

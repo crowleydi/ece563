@@ -153,18 +153,22 @@ int
 main(int argc, const char **argv)
 {
     int f = 300; // Frequency in MHz
+    int n = 4;   // number of refinements
     if (argc > 1)
         f = atoi(argv[1]);
+    if (argc > 2)
+        n = atoi(argv[2]);
+
 
     Scalar lambda = c0 / (f * 1.0e6);  // Wavelength
     Scalar r = 0.25 * lambda;          // Sphere radius
     vect k(0.0, 0.0, 2.0*M_PI/lambda); // Wave vector
 
-    for (int i: {2,3,4})
+    //for (int n: {2,3,4})
     {
         RWGSphere d(r);
-        d.refine(i);
-        unsigned int size = d.edges().size();
+        d.refine(n);
+        std::size_t size = d.edges().size();
 
         // initialize global matrix and forcing matrix
         Matrix Z(size, size);
@@ -183,14 +187,19 @@ main(int argc, const char **argv)
 
         char fname[50];
         // Write mesh data
-        snprintf(fname,sizeof(fname),"data%d_%d.tri", f, i);
-        writeTRI(fname, d);
+        snprintf(fname,sizeof(fname),"data%d_%d.tri", f, n);
+
+        std::ofstream tri(fname);
+        writeTRI(tri, d);
+        tri.close();
 
         // Write matrix data (Z, forcing function)
-        snprintf(fname,sizeof(fname),"data%d_%d.mat", f, i);
-        std::ofstream os(fname);
-        writeMAT(os, Z.memptr(), size, size);
-        writeMAT(os, fb.memptr(), size, 1);
+        snprintf(fname,sizeof(fname),"data%d_%d.mat", f, n);
+
+        std::ofstream mat(fname);
+        writeMAT(mat, Z.memptr(), size, size);
+        writeMAT(mat, fb.memptr(), size, 1);
+        mat.close();
     }
 
     return 0;
