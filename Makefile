@@ -7,8 +7,8 @@ CC=g++ # use the C++ compiler for linking
 
 # the default Apple clang doesn't support OpenMP
 ifeq ($(shell uname), Darwin)
-CXX=g++-17
-CC=g++-17
+CXX=g++-15
+CC=g++-15
 endif
 
 COMP_FLAGS=-O3 -Wall -std=c++17
