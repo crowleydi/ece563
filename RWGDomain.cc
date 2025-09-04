@@ -94,34 +94,31 @@ void
 RWGDomain::discretize(std::istream& in)
 {
 
-    // this really needs some error checking ...
-    Scalar scale;
-    in >> scale;
-
     size_t numPoints;
-    in >> numPoints;
+    size_t numFaces;
+
+    in.read((char *)&numPoints, sizeof(numPoints));
+    in.read((char *)&numFaces, sizeof(numFaces));
+
     std::vector<Point> points(numPoints);
 
     for (auto& p: points)
     {
+        Scalar pr[3];
         // read point values
-        in >> p.x >> p.y >> p.z;
-        p.x *= scale;
-        p.y *= scale;
-        p.z *= scale;
-        //p.idx = i;
+        in.read((char *)pr, sizeof(pr));
+        p.x = pr[0];
+        p.y = pr[1];
+        p.z = pr[2];
     }
 
-    size_t numEls;
-    in >> numEls;
-    _faces.resize(numEls);
+    _faces.resize(numFaces);
 
     for (auto& e: _faces)
     {
-        size_t a,b,c;
-        in >> a >> b >> c;
-
-        e = Triangle(points[a], points[b], points[c]);
+        short ir[3];
+        in.read((char *)ir, sizeof(ir));
+        e = Triangle(points[ir[0]], points[ir[1]], points[ir[2]]);
     }
 
     updateEdges();
@@ -179,7 +176,7 @@ RWGDomain::updateEdges()
 void
 writeTRI(std::ostream& os, const RWGDomain& d)
 {
-    std::map<Point,size_t> pmap;
+    std::map<Point,short> pmap;
     size_t fsize = 0;
 
     for(auto& f: d.faces())
@@ -190,29 +187,31 @@ writeTRI(std::ostream& os, const RWGDomain& d)
         fsize++;
     }
 
-    os << "1" << std::endl;
-    // number of distinct points
-    os << pmap.size() << std::endl;
+    size_t psize = pmap.size();
+    os.write((const char*)&psize, sizeof(psize));
+    os.write((const char*)&fsize, sizeof(fsize));
 
     // write point coordinates
-    size_t np = 0;
+    short np = 0;
     for(auto& pair: pmap)
     {
         const Point &p = pair.first;
         pair.second = np++;
-        os << p.x << '\t' << p.y << '\t' << p.z << std::endl;
+        Scalar pr[3];
+        pr[0] = p.x;
+        pr[1] = p.y;
+        pr[2] = p.z;
+        os.write((const char*)pr, sizeof(pr));
     }
 
-    os << std::endl;
-    // number of faces
-    os << fsize << std::endl;
-
     // write the 3 indexes of the points which make up each triangle
-    for(auto& f: d.faces())
-        os << pmap[f.p0]
-            << ' ' << pmap[f.p1]
-            << ' ' << pmap[f.p2]
-            << std::endl;
+    for(auto& f: d.faces()) {
+        short ir[3];
+        ir[0] = pmap[f.p0];
+        ir[1] = pmap[f.p1];
+        ir[2] = pmap[f.p2];
+        os.write((const char*)ir, sizeof(ir));
+    }
 }
 
 
